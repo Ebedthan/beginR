@@ -1,0 +1,59 @@
+---
+title: "Comment installer R et Rstudio ?"
+subtitle: "<br/>quelque soit le système"
+author: "Anicet Ebou"
+institute: ""
+date: "2020/02/02"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+# Telecharger R et Rstudio
+
+---
+
+## Télécharger la dernière version de R
+
+- Télécharger la dernière version de R en allant sur le site du Comprehensive R Archive Network (CRAN): [https://cran.r-project.org/](https://cran.r-project.org/).
+- Ensuite allez sur télécharger R pour windows, Linux ou Mac selon votre systeme.
+- Pour finir téléchargez le fichier (R 3.6.2 au moment d'écrire ce tutoriel).
+
+---
+
+## Lancer l'installation
+
+- Suivez les indications sans rien changer de particulier.
+- Cliquez a chaque fois sur suivant.
+- Sous Windows vous pouvez installer la version 32 bits ou 64 bits. Si votre ordinateur est un ordinateur 64 bits nous vous conseillons d'installer uniquement la version 64 bits. **N'installez q'une version sur votre ordianteur**.
+
+---
+
+## Lancer l'installation
+
+- Sous windows, si votre ordinateur est 32 bits installez la version 32 bits uniquement et pensez a acheter un ordinateur 64 bits dans un futur proche.
+- Sous 
+- Cochez sur créer un raccourci sur le bureau.
+- Terminez l'installation.
+
+---
+
+## Téléchargez la dernière version de Rstudio
+
+- Allez sur le site de Rstudio en suivant ce lien: [https://rstudio.com](https://rstudio.com)
+- Ensuite cliquez sur l'onglet produits ensuite Rstudio.
+- Cliquez ensuite sur Rstudio Desktop et sur le bouton telecharger Rstudio Desktop.
+- Il faut ensuite cliquer sur le bouton gratuit de RStudio Desktop et choisir la version de Windows.
+
+---
+
+## Installer RStudio
+
+- Il faut ensuite lancer l'installeur de Rstudio en faisant un double-clique sur le fichier telecharge.
+- Ensuite il faut suivre les indications sans oublier de cocher la case pour creer un raccourci sur le bureau.
+
+---
