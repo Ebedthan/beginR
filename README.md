@@ -8,36 +8,36 @@ In Africa, so often, people don't have the right push to overcome the first chal
 ## La boîte à outils de R | R Toolkit
 
 [0.1-Installer R et Rstudio]()  
-[0.2-Github pour les utilisateurs de R]()
-[0.3-R Markdown]()
+[0.2-Github pour les utilisateurs de R]()  
+[0.3-R Markdown]()  
 
 ## La reproductibilité | Reproductibility
 
-[1.1-Qu'est ce que la reproductibilité]()
-[1.2-Les outils pour la reproductibilité]()
-[1.3-Les bonnes pratiques dans l'analyse de donnees]()
+[1.1-Qu'est ce que la reproductibilité]()  
+[1.2-Les outils pour la reproductibilité]()  
+[1.3-Les bonnes pratiques dans l'analyse de données]()  
 
 ## La visualisation des données | Data visualisation
 
-[2.1-La grammaire des graphiques]()
-[2.2-Créer des graphiques avec ggplot2]()
-[2.3-Créer des graphiques interactifs]()
+[2.1-La grammaire des graphiques]()  
+[2.2-Créer des graphiques avec ggplot2]()  
+[2.3-Créer des graphiques interactifs]()  
 
 ## La manipulation des donnees | Data wrangling
 
-[3.1-dplyr: Une grammaire de la manipulation des données]()
-[3.2-Manipuler et transformer ces données]()
+[3.1-dplyr: Une grammaire de la manipulation des données]()  
+[3.2-Manipuler et transformer les données]()  
 
 ## Importer et exporter les données | Import and export Data
 
-[4.1-Importer et exporter les données des fichiers plats]()
-[4.2-Importer et exporter les donnees des fichiers de logiciels statistiques]()
+[4.1-Importer et exporter les données des fichiers plats]()  
+[4.2-Importer et exporter les données des fichiers de logiciels statistiques]()  
 
-## La modelisation | Modelling
+## La modélisation | Modelling
 
-[5.1-Qu'est ce qu'un modele?]()
-[5.2-Les modeles supervises]()
-[5.3-Les modeles non-supervises]()
+[5.1-Qu'est ce qu'un modèle?]()  
+[5.2-Les modèles supervisés]()  
+[5.3-Les modèles non-supervisés]()  
 
 
-
+**Authors**: [Anicet Ebou](https://github.com/Ebedthan), [Ahmadou Dicko](https://github.com/dickoa) and Nadejda Sero. 
