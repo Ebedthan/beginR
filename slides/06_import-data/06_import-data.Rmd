@@ -1,0 +1,229 @@
+---
+pagetitle: "Importer et exporter les données"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default-fonts","default", "../slides.css"]
+    lib_dir: libs
+    nature:
+      beforeInit: "../macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+class: first-slide, center
+
+<br/>
+
+<h1>L'analyse des données avec <img src="../img/Rlogo.png" width="10%" height="auto"></h1>
+<br/>
+<h1>Importer et exporter les données `r emo::ji('file')`</h1>
+<h3 style="color:#162C9a; text-align:center;">Anicet Ebou, Data et al.</h3>
+<h5>`r icon::fa_github()` @Ebedthan, `r icon::fa_twitter()` @anicetebou</h5>
+---
+```{r child = "../setup.Rmd"}
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+library(data.table)
+```
+
+class: center, middle, inverse
+
+# Importer les données
+
+---
+
+## Les types de fichiers
+
+- Les fichiers texte (Flat files): comma separated value (csv), tab separated value (tsv), etc.
+- Les fichiers Excel: .xlsx ou .xls.
+- Les fichiers statistiques: SAS, SPSS, STATA.
+- Les bases de données: PostgreSQL, MySQL.
+- Les données du Web: Scrapping.
+
+---
+
+## Importer les fichiers textes
+
+Nous utiliserons les packages `readr` et `data.table` pour leur rapidité et leur consistance.
+
+.pull-left[
+
+- fichier.csv avec header:  
+`date,first_name,last_name,age`  
+`2020-01-01,john,doe,23`  
+`2020-01-02,jane,doe,25`  
+...  
+
+```{r eval=FALSE}
+file_name <- readr::read_csv("lien/vers/fichier.csv")
+```
+
+]
+
+.pull-right[
+
+- fichier.csv sans header:  
+`2020-01-01,john,doe,23`  
+`2020-01-02,jane,doe,25`  
+... 
+
+```{r eval=FALSE}
+file_name <- readr::read_csv("lien/vers/fichier.csv",
+                             col_names = FALSE)
+```
+
+]
+
+---
+
+## Importer les fichiers textes
+
+.pull-left[
+
+- fichier.tsv avec header:  
+`date\tfirst_name\tlast_name\tage`  
+`2020-01-01\tjohn\tdoe\t23`  
+`2020-01-02\tjane\tdoe\t25`  
+...  
+
+```{r eval=FALSE}
+file_name <- readr::read_tsv("lien/vers/fichier.csv")
+```
+
+]
+
+.pull-right[
+
+- fichier.tsv sans header:  
+`2020-01-01\tjohn\tdoe\t23`  
+`2020-01-02\tjane\tdoe\t25`  
+... 
+
+```{r eval=FALSE}
+file_name <- readr::read_tsv("lien/vers/fichier.csv",
+                             col_names = FALSE)
+```
+
+]
+
+---
+
+
+## Importer les fichiers textes
+
+La fonction `fread()` du package data.table détecte immédiatement le format du fichier et la présence ou non d'entête.
+
+.pull-left[
+
+- fichier.csv (fichier.tsv) avec header:  
+`date,first_name,last_name,age`  
+`2020-01-01,john,doe,23`  
+`2020-01-02,jane,doe,25`  
+...  
+
+```{r eval=FALSE}
+file_name <- data.table::fread("lien/vers/fichier.csv")
+```
+]
+
+.pull-right[
+
+- fichier.csv (fichier.tsv) sans header:  
+`2020-01-01,john,doe,23`  
+`2020-01-02,jane,doe,25`  
+... 
+
+```{r eval=FALSE}
+file_name <- data.table::fread("lien/vers/fichier.csv")
+```
+
+]
+---
+
+## Importer les fichiers Excel
+
+Si vous entrez vos données dans Excel avant de les importer dans R alors faites un fichier excel sans grand style pour l'importation. Nous utiliserons le package `readxl`.
+
+.pull-left[
+  
+![](./img/excel-file.png)
+  
+]
+
+.pull-right[
+
+```{r eval=FALSE}
+# pour les fichiers xlsx
+file_name <- read_xlsx("lien/vers/fichier.xlsx")
+
+# pour les fichiers xls
+file_name <- read_xls("lien/vers/fichier.xls")
+
+# si on n'est pas trop sur
+file_name <- read_excel("lien/vers/fichier.xlsx")
+```
+
+]
+
+---
+
+class: center, middle, inverse
+
+# Exporter les données
+
+---
+
+## Exporter les données
+
+```{r eval=FALSE}
+# Exporter en csv
+write_csv(objet, "fichier_export.csv")
+
+# Exporter en tsv
+write_tsv(objet, "fichier_export.tsv")
+
+# Convertir un fichier csv en excel
+write_excel_csv(objet, "fichier_export.xlsx")
+```
+
+---
+
+## Les autres types de fichiers
+
+- Le package **haven**  permet d'importer les fichiers de SPSS, SAS, STATA.
+- Le package **DBI** permet de communiquer avec les bases de données.
+- Le package **jsonlite** pour les fichiers json.
+- Le package **xml2** pour les fichiers xml
+
+---
+
+## haven pour les fichiers SPSS, SAS, STATA
+
+```{r eval=FALSE}
+library(haven)
+
+# SAS
+read_sas("mtcars.sas7bdat")
+write_sas(mtcars, "mtcars.sas7bdat")
+
+# SPSS
+read_sav("mtcars.sav")
+write_sav(mtcars, "mtcars.sav")
+
+# Stata
+read_dta("mtcars.dta")
+write_dta(mtcars, "mtcars.dta")
+```
+
+---
+
+
+class: center, middle
+
+# Fin de la sixième session !
+# Merci !
+<h1> `r emo::ji("clap")` </h1>

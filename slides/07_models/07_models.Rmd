@@ -1,0 +1,133 @@
+---
+pagetitle: "La modélisation"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default-fonts","default", "../slides.css"]
+    lib_dir: libs
+    nature:
+      beforeInit: "../macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+class: first-slide, center
+
+<br/>
+
+<h1>L'analyse des données avec <img src="../img/Rlogo.png" width="10%" height="auto"></h1>
+<br/>
+<h1>La modélisation</h1>
+<h3 style="color:#162C9a; text-align:center;">Anicet Ebou, Data et al.</h3>
+<h5>`r icon::fa_github()` @Ebedthan, `r icon::fa_twitter()` @anicetebou</h5>
+---
+```{r child = "../setup.Rmd"}
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(broom)
+library(modelr)
+```
+
+class: center, middle, inverse
+
+# Les modèles
+
+---
+
+## Qu'est ce qu'un modèle?
+
+- Un modèle est une représentation des données en présence.
+.quote[Le but d'un modèle est de donner une représentation simple en dimension réduite d'un jeu de données - Hadley Wickham]
+- Les modèles sont utilisés pour décrire une relation entre des variables et pour faire des prédictions.
+
+---
+
+## Les bases
+
+Pour modéliser des données il faut en premier lieu définir une famille de modèles et ensuite entrainer le modèle.
+
+On distingue en général les modèles supervisés et les modèles non supervisés en apprentissage machine.
+
+Nous n'irons pas jusque la.
+
+---
+
+class: center, inverse
+
+# Modélisons
+
+---
+
+## Price
+
+```{r}
+ggplot(data = diamonds, aes(x = price)) +
+  geom_histogram(binwidth = 1000)
+```
+
+---
+
+## Price vs carat
+
+```{r, echo=FALSE, message=FALSE}
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point() + geom_smooth()
+```
+
+---
+
+## Visualize the linear model
+
+
+```{r message=FALSE, echo=FALSE}
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point() + geom_smooth(method = "lm", se = FALSE)
+```
+
+---
+
+## Le vocabulaire
+
+- Variable dépendante: C'est la variable qui est étudiée, c'est à dire la variable dont on essaie de comprendre le comportement ou la variation.
+- Variable indépendante (explicative): Ce sont les variables que nous voulons utiliser pour expliquer la variation de la réponse (variable dépendante). 
+- Valeur prédite: C'est la valeur prédite à l'aide du modèle.
+- Résidues: valeur qui montre la différence entre le résultat et la valeur prédite par le modèle.
+
+---
+
+## Le modèle comme une fonction
+
+On peut repréenter la relation entre les variables par une fonction, dans notre cas une fonction linéaire:
+
+$$y = b + ax$$
+
+---
+
+## Modélisons le prix en fonction des carats
+
+```{r}
+model <- lm(price ~ carat, data = diamonds)
+model
+```
+
+$$\widehat{Price} = -2256 + 7756\widehat{Carat}$$
+---
+
+## Mesurer la precision du modele
+
+```{r}
+glance(model)
+```
+
+Le $$R^2 = 0.84$$ soit 84%.
+
+---
+
+class: center, middle
+
+# Fin de la septième session !
+# Merci !
+<h1> `r emo::ji("clap")` </h1>

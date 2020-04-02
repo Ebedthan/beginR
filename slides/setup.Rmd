@@ -1,0 +1,55 @@
+```{r setup, include=FALSE}
+# R options
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE,     # for regression output
+  warn = 1
+  )
+
+# figure height, width, dpi
+knitr::opts_chunk$set(fig.height = 2.5, fig.width = 5, dpi = 300) 
+
+# fontawesome
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+# magick
+dev.off <- function(){
+  invisible(grDevices::dev.off())
+}
+
+# code highlighting
+hook_source <- knitr::knit_hooks$get('source')
+knitr::knit_hooks$set(source = function(x, options) {
+  x <- stringr::str_replace(x, "^[[:blank:]]?([^*].+?)[[:blank:]]*#<<[[:blank:]]*$", "*\\1")
+  hook_source(x, options)
+})
+
+# Reduce output lines
+hook_output <- knitr::knit_hooks$get("output")
+knitr::knit_hooks$set(output = function(x, options) {
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines)==1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
+```
+
+layout: true
+  
+<div class="my-footer">
+</div>
+
+---

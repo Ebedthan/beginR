@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Les outils</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.3.1/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: first-slide, center
+
+&lt;br/&gt;
+
+&lt;h1&gt;L'analyse des données avec &lt;img src="../img/Rlogo.png" width="10%" height="auto"&gt;&lt;/h1&gt;
+&lt;br/&gt;
+&lt;h1&gt;Les outils de travail 🔱&lt;/h1&gt;
+&lt;h3 style="color:#162C9a; text-align:center;"&gt;Anicet Ebou, Data et al.&lt;/h3&gt;
+&lt;h5&gt;<i class="fab  fa-github "></i> @Ebedthan, <i class="fab  fa-twitter "></i> @anicetebou&lt;/h5&gt;
+
+---
+
+class: center, middle, inverse
+
+# La reproductibilité dans les analyses de données
+
+---
+
+## L'Analyse reproductible
+
+.question[
+Qu'est ce que c'est qu'une analyse de donnée 'réproductible' ?
+]
+
+--
+
+A cours terme:
+- Est-ce que les figures et les tableaux peuvent être reproduis à partir des codes et données disponible ?
+- Est-ce que le code réagis comme on l'attends?
+- Sait-on en plus **pourquoi** les choses ont été faites comme cela?
+
+A long terme:
+- Peut-on utiliser le même code pour analyser d'autres données?
+- Le code peut-il être amélioré pour d'autres analyses?
+
+---
+
+## Les bonnes pratiques et les outils
+
+- Utiliser les projets RStudio.
+- Utiliser 📦 `here` pour la gestion des chemins vers les fichiers.
+- Initialiser le projet avec le gestionnaire de 📦 `renv`.
+- Définir les pipelines d'analyse avec 📦 `drake`.
+- Utiliser Git/Github pour la gestion des versions.
+- Rmarkdown pour la programmation littérale.
+
+Visitez https://annakrystalli.me/talks/r-in-repro-research-dc.html pour plus de détails.
+
+---
+
+## Qu'est ce que R/RStudio?
+
+- R est un langage de programmation statistique.
+- RStudio est une interface convenable pour R (IDE).
+- De facon plus simple: R est comme le moteur et RStudio est comme le tableau de bord.  
+
+![:scale 75%](./img/engine-dashboard.png)
+
+.footnote[
+source: ModernDive
+]
+
+---
+
+## Un petit tour de R/RStudio
+
+- La console.
+- Utiliser R comme une calculatrice.
+- Environnement.
+- Charger et visualiser un tableau: programmaticallement et graphiquement.
+
+
+```r
+table &lt;- readxl::read_excel("dataframe.xlsx")
+View(table)
+```
+
+Panneau environnement `\(\rightarrow\)` import Dataset `\(\rightarrow\)` Selectionnez le type de fichier `\(\rightarrow\)` Selectionnez le fichier `\(\rightarrow\)` Definissez les parametres `\(\rightarrow\)` cliquer sur importer
+
+---
+
+## Un petit tour de R/RStudio
+
+- Accéder à une variable dans un tableau: avec le symbole $.
+
+
+```r
+table$var_name ou table[,numColumn]
+```
+
+- Fonctions dans R: ce sont la plupart du temps des verbes suivie de parenthèses.
+
+
+```r
+fais_ceci(a_ceci)
+fais_cela(a_ceci, a_cela, avec_ca)
+```
+
+- Les packages sont installés avec la fonction `install.packages()` et chargé avec la fonction `library()`:
+
+
+```r
+install.packages("package_name")
+library(package_name)
+```
+---
+
+## Projets dans RStudio
+
+- Les projets dans RStudio permettent de garder les codes écrits pour une analyse ainsi que les données et autre matériel ensemble dans un même dossier.
+- Pour créer un nouveau projet: Fichier &gt; Nouveau projet &gt; Nouveau dossier.
+- Les projets RStudio sont portables et indépendant entre autres.
+
+---
+## R Markdown et Knitr: Yihui Xie
+
+.pull-left[
+![:scale 50%](./img/logo.png)
+]
+
+.pull-right[
+- [yihui.org](https://yihui.org)
+- Markdown, R, Pandoc
+- Plus beau, plus puissant, simplement avec R Markdown
+]
+
+---
+
+## R Markdown
+
+- Rapports entièrement reproductibles: chaque fois que vous reconstruisez le fichier, l'analyse est exécutée depuis le début.
+- Une simple syntax utilisant markdown.
+- Les codes vont dans les chuncks, défini par trois backticks, les textes vont à l'extérieur des chuncks.
+
+---
+
+## Un petit tour de R Markdown
+
+- Ouvrir un document R Markdown.  
+- Construisez vos documents.  
+- R Markdown et certaines syntaxes.  
+---
+
+### R Markdown help
+
+.pull-left[
+[R Markdown cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf)
+![rmd-cheatsheet](./img/rmd-cheatsheet.png)
+]
+
+.pull-right[
+R Markdown Quick Reference  
+
+Help `\(\rightarrow\)` Markdown Quick Reference
+
+![rmd-cheat](./img/md-cheatsheet.png.jpeg)
+]
+---
+
+### Workspace
+
+L'espace de travail du document **R Markdown** est différent de celui de la **console**.
+
+- Lancez cette commande dans la console:
+
+
+```r
+x &lt;-2
+x*4
+```
+
+.instructions[
+Tout semble bien se passer n'est ce pas?
+]
+
+- Maintenant lancez cette ligne dans le R Markdown:
+
+```r
+x*4
+```
+
+.instructions[
+Qu'est ce que vous remarquez?
+]
+
+---
+
+## Comment il faudrait utiliser R Markdown
+
+- Chaque projet, analyse, rapport, etc devrait être redigé dans un R Markdown.
+- C'est une habitude à prendre.
+
+---
+
+## Tidyverse
+
+.pull-left[
+![](./img/tidyverse.png)
+]
+
+.pull-right[
+[tidyverse.org](https://tidyverse.org)
+
+- Tidyverse est une collection de paquets R conçus pour la data science.
+- Tous les packages partagent une même philosophie sous-jacente et une grammaire commune. 
+]
+
+---
+## Que retenir ?
+
+- Toutes les analyses de données doivent (devraient être) être reproductibles.
+- Rstudio et certains package facilitent la conception d'analyses reproductibles.
+- R est le moteur, RStudio le tableau de bord.
+- R Markdown est incroyable, exceptionnel et unique.
+- L'espace de travail de R Markdown est différent de celui de R.
+- Tidyverse est la facon de penser Data Science.
+
+---
+
+## Thanks
+
+Mine CetinkayaRundel's Data Science box course: [datasciencebox.org](https://datasciencebox.org)
+
+---
+class: center, middle
+
+## Fin de la deuxième session !
+## Merci !
+&lt;h1&gt; 👏 &lt;/h1&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>La manipulation des données</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: first-slide, center
+  
+&lt;br/&gt;
+  
+&lt;h1&gt;L'analyse des données avec &lt;img src="../img/Rlogo.png" width="10%" height="auto"&gt;&lt;/h1&gt;
+&lt;br/&gt;
+&lt;h1&gt;La manipulation des données 🏺&lt;/h1&gt;
+&lt;h3 style="color:#162C9a; text-align:center;"&gt;Anicet Ebou, Data et al.&lt;/h3&gt;
+&lt;h5&gt;<i class="fab  fa-github "></i> @Ebedthan, <i class="fab  fa-twitter "></i> @anicetebou&lt;/h5&gt;
+
+---
+
+## Rappels
+
+- R est un langage de programmation statistique
+- RStudio est une interface convenable pour R
+- La data science a pour but de donner un apercu insoupconné sur des données
+- Toutes les analyses de données devraient être reproductible
+- R Markdown est un format de fichier pour créer des documents dynamiques
+- En analyse de données exploratoire, on commence toujours avec une visualisation des données
+- ggplot2 facilite la visualisation des données
+
+---
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;/div&gt;
+
+---
+
+
+
+
+class: center, middle, inverse
+
+# Données ordonnées (Tidy data)
+
+---
+
+.left-column[
+
+## Qu'est ce que c'est?
+
+]
+
+.right-column[
+.quote[
+"Happy families are all alike; every unhappy family is unhappy is its own way." — Leo Tolstoy
+]
+
+Les règles qui définissent les données ordonnées sont:
+
+- Chaque variable doit avoir sa propre colonne;
+- Chaque observation doit avoir sa propre ligne;
+- Chaque valeur doit avoir sa propre cellule.
+]
+---
+
+## Données ordonnées
+
+![](./img/tidy-1.png)
+
+credits: R for Data Science - Hadley Wickham, Garret Grolemund
+
+---
+
+class: middle, center, inverse
+
+# Manipulation des données
+
+---
+## Données sur la santé des pays Africains
+
+Le jeu de données est contenue dans le package afrods (une partie des données sur la santé): 
+
+
+```r
+# devtools::install_github("Ebedthan/afrods")
+library(afrods)
+health
+```
+
+---
+## Variables
+
+Pour voir les variables dans un jeu de données: 
+
+
+```r
+names(health)
+```
+
+```
+##  [1] "country"                                                                                       
+##  [2] "region"                                                                                        
+##  [3] "year"                                                                                          
+##  [4] "Births attended by skilled health staff (% of total)"                                          
+##  [5] "Contraceptive prevalence (% of women ages 15-49)"                                              
+##  [6] "One-year-olds immunized with MCV (%)"                                                          
+##  [7] "Deads kids per couple"                                                                         
+##  [8] "Infant mortality rate"                                                                         
+##  [9] "Under five mortality"                                                                          
+## [10] "Per capita total expenditure on health at average exchange rate (US$)"                         
+## [11] "Estimated HIV Prevalence% - (Ages 15-49)"                                                      
+## [12] "Life expectancy with projections"                                                              
+## [13] "Life expectancy"                                                                               
+...
+```
+---
+## Un apercu des données
+
+- Dans Rstudio, faire `data(health)`, ensuite cliquer sur le nom du jeu de données dans le panneau environnement.
+- Dans la console, utiliser la fonction `glimpse` pour un apercu: `glimpse(health)`.
+
+
+```r
+glimpse(health)
+```
+
+```
+## Observations: 15,208
+## Variables: 84
+## $ country                                                                                          &lt;fct&gt; …
+## $ region                                                                                           &lt;fct&gt; …
+## $ year                                                                                             &lt;dbl&gt; …
+## $ `Births attended by skilled health staff (% of total)`                                           &lt;dbl&gt; …
+## $ `Contraceptive prevalence (% of women ages 15-49)`                                               &lt;dbl&gt; …
+## $ `One-year-olds immunized with MCV (%)`                                                           &lt;dbl&gt; …
+## $ `Deads kids per couple`                                                                          &lt;dbl&gt; …
+## $ `Infant mortality rate`                                                                          &lt;dbl&gt; …
+...
+```
+---
+
+## Une grammaire pour la manipulation des données
+
+**dplyr** est basé sur des verbes (fonctions) qui facilitent la manipulation des données.
+
+.pull-left[
+![:scale 55%](./img/dplyr-part-of-tidyverse.png)
+]
+
+.pull-right[
+- `filter()`: sélectionne les observations par leurs valeurs.
+- `arrange()`: réorganise les lignes.
+- `select()`: sélectionne les variables par leurs noms.
+- `mutate()`: crée de nouvelles variables en fonction des variables existantes.
+- `summarise()`: Résume les valeurs en un seul summary.
+- etc.
+]
+
+---
+
+## Une grammaire pour la manipulation des données
+
+Tout les verbes **dplyr** fonctionnent de la même manière: 
+
+- Le premier argument est un data frame.
+
+```r
+verb(dataframe)
+```
+- Les arguments des verbes décrivent **quoi faire** avec le data frame, en utilisant **les noms des variables (sans les griffes)**.
+
+```r
+verb(dataframe, var1 == value)
+```
+- Le résultat est un nouveau data frame (Il faut donc sauver ce nouveau data frame).
+
+```r
+df &lt;- verb(dataframe, var1 == value)
+```
+---
+
+## Filtrer les observations avec `filter()`
+
+Pour les données uniquement sur la Côte d'Ivoire:
+
+
+```r
+filter(health, country == "Cote d'Ivoire")
+```
+
+```
+##           country         region year
+## 1   Cote d'Ivoire Western Africa 1545
+## 2   Cote d'Ivoire Western Africa 1586
+## 3   Cote d'Ivoire Western Africa 1590
+## 4   Cote d'Ivoire Western Africa 1610
+## 5   Cote d'Ivoire Western Africa 1614
+## 6   Cote d'Ivoire Western Africa 1635
+## 7   Cote d'Ivoire Western Africa 1644
+## 8   Cote d'Ivoire Western Africa 1657
+## 9   Cote d'Ivoire Western Africa 1660
+...
+```
+
+---
+
+## Introduisons l'opérateur pipe: %&gt;%
+
+Ecrire 
+
+```r
+filter(health, country == "Cote d'Ivoire")
+```
+
+```
+##           country         region year
+## 1   Cote d'Ivoire Western Africa 1545
+## 2   Cote d'Ivoire Western Africa 1586
+...
+```
+
+Equivaut à (avec la pipe)
+
+```r
+health %&gt;% filter(country == "Cote d'Ivoire")
+```
+
+```
+##           country         region year
+## 1   Cote d'Ivoire Western Africa 1545
+## 2   Cote d'Ivoire Western Africa 1586
+...
+```
+
+---
+## Introduisons l'opérateur pipe: %&gt;%
+
+`%&gt;%` permet d'effectuer des opérations multiples sur les mêmes données plus facilement tout en gardant le code lisible.
+
+Par exemple 
+
+```r
+cote_ivoire &lt;- filter(health, country == "Cote d'Ivoire")
+infant_mortality_ci &lt;- select(cote_ivoire, `Infant mortality rate`)
+```
+
+est plus simplement effectué par
+
+```r
+health %&gt;% 
+  filter(country == "Cote d'Ivoire") %&gt;%
+  select(`Infant mortality rate`)
+```
+
+---
+
+## Introduisons l'opérateur pipe: %&gt;%
+
+L'opérateur pipe est implementé dans le package **magrittr** et est prononcé "(et) ensuite".
+
+.pull-left[
+![](./img/magritte.jpg)
+]
+.pull-right[
+![](./img/magrittr.jpg)
+]
+---
+## Filtrer sur plusieurs conditions à la fois
+
+Pour les données sur la Côte d'Ivoire entre 1960 et 2010
+
+
+```r
+health %&gt;%
+  filter(country == "Cote d'Ivoire", year %in% c(1960:2010))
+```
+
+```
+##          country         region year
+## 1  Cote d'Ivoire Western Africa 1960
+## 2  Cote d'Ivoire Western Africa 1961
+## 3  Cote d'Ivoire Western Africa 1962
+## 4  Cote d'Ivoire Western Africa 1963
+## 5  Cote d'Ivoire Western Africa 1964
+## 6  Cote d'Ivoire Western Africa 1965
+## 7  Cote d'Ivoire Western Africa 1966
+## 8  Cote d'Ivoire Western Africa 1967
+## 9  Cote d'Ivoire Western Africa 1968
+...
+```
+
+---
+
+## Les opérateurs logiques
+
+opérateur | définition          | | opérateur |  définition
+----------|---------------------| |-----------|-----------------
+`&lt;`         |plus petit           | |`x` &amp;nbsp;&amp;#124;&amp;nbsp; `y`      |`x` OU `y`
+`&lt;=`        |plus petit ou égale  | |is.na(x)   |test si `x` est NA
+`&gt;`         |plus grand que       | |!is.na(x)  |test si `x` n'est pas NA
+`&gt;=`        |plus grand ou égal à | |`x` %in% `y`   |test si `x` est contenue dans `y`
+`==`        |égale à              | |!(`x` %in% `y`)|test si `x` n'est pas contenue dans `y`
+`!=`        |différent de         | |!`x`         |différent de `x`
+`x` &amp; `y`     |`x` ET `y`               | |           |
+
+---
+
+## Comment les opérateurs logiques fonctionnent
+
+![:scale 60%](./img/transform-logical.png)
+
+
+```r
+health %&gt;%
+  filter(country == "Cote d'Ivoire", year == 1960 | year == 2010)
+```
+
+```
+##         country         region year
+## 1 Cote d'Ivoire Western Africa 1960
+## 2 Cote d'Ivoire Western Africa 2010
+##   Births attended by skilled health staff (% of total)
+...
+```
+
+---
+
+## Ordonner les lignes avec `arrange()`
+
+`arrange()` permet d'ordonner les lignes de facon croissante ou décroissante.
+
+
+```r
+health %&gt;% arrange(year)
+```
+
+```
+##                country          region year
+## 1              Algeria Northern Africa 1545
+## 2               Angola   Middle Africa 1545
+## 3                Benin  Western Africa 1545
+## 4             Botswana Southern Africa 1545
+...
+```
+
+
+```r
+health %&gt;% arrange(desc(year))
+```
+
+```
+##                       country          region year
+## 1                     Algeria Northern Africa 2099
+## 2                      Angola   Middle Africa 2099
+## 3                       Benin  Western Africa 2099
+## 4                    Botswana Southern Africa 2099
+...
+```
+
+---
+
+## Sélectionner un certain nombre de ligne avec `slice()`
+
+Pour les 10 premières lignes:
+
+
+```r
+health %&gt;% slice(1:10)
+```
+
+```
+##    country          region year
+## 1  Algeria Northern Africa 1545
+## 2  Algeria Northern Africa 1586
+## 3  Algeria Northern Africa 1590
+## 4  Algeria Northern Africa 1610
+## 5  Algeria Northern Africa 1614
+## 6  Algeria Northern Africa 1635
+## 7  Algeria Northern Africa 1644
+## 8  Algeria Northern Africa 1657
+## 9  Algeria Northern Africa 1660
+...
+```
+
+---
+
+## Sélectionner des variables avec `select()`
+
+- Sélectionner pour garder les variables
+
+```r
+health %&gt;% select(country, year, region)
+```
+
+```
+##                        country year          region
+## 1                      Algeria 1545 Northern Africa
+## 2                      Algeria 1586 Northern Africa
+## 3                      Algeria 1590 Northern Africa
+## 4                      Algeria 1610 Northern Africa
+...
+```
+
+- Exclure des variables
+
+```r
+health %&gt;% select(-region)
+```
+
+```
+##           country year Births attended by skilled health staff (% of total)
+## 1         Algeria 1545                                                   NA
+## 2         Algeria 1586                                                   NA
+## 3         Algeria 1590                                                   NA
+## 4         Algeria 1610                                                   NA
+...
+```
+
+---
+## Sélectionner des variables avec `select()`
+
+Sélectionner une suite variables
+
+```r
+health %&gt;%
+  select(country:region)
+```
+
+```
+##                        country          region
+## 1                      Algeria Northern Africa
+## 2                      Algeria Northern Africa
+## 3                      Algeria Northern Africa
+## 4                      Algeria Northern Africa
+## 5                      Algeria Northern Africa
+## 6                      Algeria Northern Africa
+## 7                      Algeria Northern Africa
+## 8                      Algeria Northern Africa
+## 9                      Algeria Northern Africa
+...
+```
+---
+
+## Ajouter de nouvelles variables avec `mutate()`
+
+`mutate()` permet d'ajouter de nouvelles colonnes (variables).
+
+
+```r
+health %&gt;%
+  mutate(elapsed_years = 2020 - year)
+```
+
+```
+##       country          region year
+## 1     Algeria Northern Africa 1545
+## 2     Algeria Northern Africa 1586
+## 3     Algeria Northern Africa 1590
+## 4     Algeria Northern Africa 1610
+## 5     Algeria Northern Africa 1614
+## 6     Algeria Northern Africa 1635
+## 7     Algeria Northern Africa 1644
+## 8     Algeria Northern Africa 1657
+## 9     Algeria Northern Africa 1660
+...
+```
+
+---
+
+## Mesures groupées avec `summarise()`
+
+
+```r
+health %&gt;% 
+  summarise(`Life expectancy` = mean(`Life expectancy`, na.rm = TRUE))
+```
+
+```
+##   Life expectancy
+## 1        37.40498
+```
+
+Combiné avec `group_by()`
+
+```r
+health %&gt;% 
+  group_by(region) %&gt;% 
+  summarise(`Life expectancy` = mean(`Life expectancy`, na.rm = TRUE))
+```
+
+```
+## # A tibble: 5 x 2
+##   region          `Life expectancy`
+##   &lt;fct&gt;                       &lt;dbl&gt;
+## 1 Eastern Africa               37.7
+## 2 Middle Africa                36.1
+## 3 Northern Africa              40.5
+## 4 Southern Africa              39.1
+## 5 Western Africa               36.1
+```
+---
+
+## Autres fonctions utiles
+
+- `pull()` pour extraire une variable comme vecteur
+
+```r
+health %&gt;% pull(region)
+```
+
+```
+##     [1] Northern Africa Northern Africa Northern Africa Northern Africa
+##     [5] Northern Africa Northern Africa Northern Africa Northern Africa
+##     [9] Northern Africa Northern Africa Northern Africa Northern Africa
+##    [13] Northern Africa Northern Africa Northern Africa Northern Africa
+##    [17] Northern Africa Northern Africa Northern Africa Northern Africa
+...
+```
+
+- `distinct()` pour avoir les lignes uniques
+
+```r
+health %&gt;% distinct(region)
+```
+
+```
+##            region
+## 1 Northern Africa
+## 2   Middle Africa
+## 3  Western Africa
+## 4 Southern Africa
+...
+```
+
+---
+
+## Autres fonctions utiles
+
+- `sample_n()` pour un echantillon aléatoire de **n** éléments
+
+```r
+health %&gt;% sample_n(5, replace = FALSE)
+```
+
+```
+##         country          region year
+## 1     Swaziland Southern Africa 1964
+## 2        Guinea  Western Africa 1959
+## 3 Cote d'Ivoire  Western Africa 1870
+## 4         Sudan Northern Africa 1895
+...
+```
+
+- `sample_frac()` pour un échantillon aléatoire de **frac** %
+
+```r
+health %&gt;% sample_frac(0.2, replace = FALSE)
+```
+
+```
+##                       country          region year
+## 1                South Africa Southern Africa 2043
+## 2                        Mali  Western Africa 1861
+## 3                        Togo  Western Africa 1766
+## 4                     Algeria Northern Africa 1877
+...
+```
+---
+
+## Autres fonctions utiles
+
+- `count()` pour le nombre d'observation par groupe
+
+```r
+health %&gt;% count(region)
+```
+
+```
+## # A tibble: 5 x 2
+##   region              n
+##   &lt;fct&gt;           &lt;int&gt;
+## 1 Eastern Africa   4791
+## 2 Middle Africa    2317
+## 3 Northern Africa  1800
+## 4 Southern Africa  1500
+## 5 Western Africa   4800
+```
+---
+
+## Que retenir ?
+
+- `dplyr` est une grammaire pour la manipulation des données.
+- Les action à poser sont **verbes**.
+- L'opérateur pipe facilite la tâche et à consommer sans modération.
+- Il faut toujours sauvegarder les résultats en les assignants dans des variables.
+
+---
+
+class: center, middle
+
+# Fin de la quatrième session !
+# Merci !
+&lt;h1&gt; 👏 &lt;/h1&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+---
+pagetitle: "Ordonner les données"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default-fonts","default", "../slides.css"]
+    lib_dir: libs
+    nature:
+      beforeInit: "../macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+
+class: first-slide, center
+  
+<br/>
+  
+<h1>L'analyse des données avec <img src="../img/Rlogo.png" width="10%" height="auto"></h1>
+<br/>
+<h1>Ordonner les données</h1>
+<h3 style="color:#162C9a; text-align:center;">Anicet Ebou, Data et al.</h3>
+<h5>`r icon::fa_github()` @Ebedthan, `r icon::fa_twitter()` @anicetebou</h5>
+
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+class: center, middle, inverse
+
+# Données ordonnées (Tidy data)
+
+---
+
+.left-column[
+
+## Qu'est ce que c'est?
+
+]
+
+.right-column[
+.quote[
+"Happy families are all alike; every unhappy family is unhappy is its own way." — Leo Tolstoy
+]
+
+Les règles qui définissent les données ordonnées sont:
+
+- Chaque variable doit avoir sa propre colonne;
+- Chaque observation doit avoir sa propre ligne;
+- Chaque valeur doit avoir sa propre cellule.
+]
+---
+
+## Données ordonnées
+
+![](./img/tidy-1.png)
+
+credits: R for Data Science - Hadley Wickham, Garret Grolemund
+
+- Nous utiliserons le package `tidyr`.
+
+---
+
+class: middle, center, inverse
+
+# tidyr
+---
+
+## Les données non ordonnées
+
+En général on fait face à deux types de cas pour des données non ordonnées:
+
+- Les variables sont étalées sur plusieurs colonnes;
+- Les observations sont combinées sur plusieurs lignes.
+
+---
+
+## pivot_longer()
+
+Cette fonction sert à résoudre le premier type de problème.
+
+```{r, echo=FALSE}
+table1 <- readxl::read_excel("data/Inflation.xlsx")
+```
+
+```{r output.lines = 10}
+table1
+```
+
+---
+
+## pivot_longer()
+
+```{r}
+table1 %>% 
+  pivot_longer(`1961`:`2011`, names_to = "year", values_to = "inflation")
+```
+
+---
+
+## pivot_wider()
+
+Cette fonction sert à résoudre le second type de problème.
+
+```{r, echo=FALSE}
+table2 <- readxl::read_excel("data/sickness.xlsx")
+```
+
+```{r}
+table2
+```
+
+---
+
+## pivot_wider()
+
+```{r}
+table2 %>% 
+  pivot_wider(names_from = type, values_from = count)
+```
+
+---
+
+## separate()
+
+Cette fonction sert à séparer des variables en plusieurs colonnes.
+
+```{r, echo=FALSE}
+table3 <- readxl::read_excel("data/sickness.xlsx", sheet = 2)
+```
+
+```{r}
+table3
+```
+
+---
+
+## separate()
+
+```{r}
+table3 %>% 
+  separate(rate, into = c("cases", "population"))
+```
+
+---
+
+## unite()
+
+Cette fonction agis comme le contraire de la fonction separate.
+
+---
+
+class: center, middle
+
+# Fin de la cinquième session !
+# Merci !
+<h1> `r emo::ji("clap")` </h1>

@@ -1,0 +1,157 @@
+
+.first-slide .pull-left{
+  margin-left: 60px;
+}
+
+.first-slide .pull-right{
+  text-align: center;
+}
+
+div.remark-slide-content.first-slide.hljs-github::after {
+  display: none;
+}
+
+div.remark-slide-content.center.middle.inverse.hljs-github::after {
+  display: none;
+}
+
+.remark-slide a{
+  text-decoration: underline;
+}
+
+.inverse {
+  background-color: #3e424b;
+  text-shadow: none;
+}
+
+.inverse h1{
+  color: #FFD027;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #3e424b;
+}
+
+.remark-slide-content {
+  font-size: 22px;
+}
+
+/* Footer */
+div.my-footer {
+    color: black;
+    position: absolute;
+    bottom: 0px;
+    left: 80px;
+    height: 35px;
+    width: 100%;
+}
+div.my-footer span {
+    font-size: 12pt;
+    position: absolute;
+    color: black;
+    left: 20px;
+    bottom: 10px;
+}
+
+div.my-footer span .inverse {
+    color: #fff;
+}
+
+/* Slide number */
+.remark-slide-number {
+  color: #3e424b;
+  opacity: 1;
+  font-size: 12pt;
+}
+
+.inverse .remark-slide-number {
+  color: #ffffff;
+  opacity: 1;
+  font-size: 12pt;
+}
+
+.first-slide .remark-slide-number{
+  display: none;
+}
+
+/* Custom boxes */
+.question {
+  border-left: solid 5px #1E5C65;
+  background-color: #1E5C6530;
+  padding: 1px 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+.alert {
+  border-right: solid 5px #A7D5E8;
+  background-color: #A7D5E830;
+  padding: 1px 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.instructions {
+  border-left: solid 5px #FFD748;
+  background-color: #FFD74850;
+  font-size: 18px;
+  padding: 1px 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.instructions li::before {
+  content: ">"; 
+  color: #FFD748;
+  display: inline-block; 
+  margin-left: -1.5em
+}
+.quote {
+  background-color: #3e424b;
+  color: white;
+  font-size: 22px;
+  padding: 1px 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+}
+
+li::before {
+  content: "✚"; 
+  display: inline-block; 
+  width: 1.5em;
+  margin-left: -1.5em;
+}
+
+li{
+  margin: 10px 0;
+}
+
+/* Code formatting */
+.remark-code-line-highlighted {
+  background-color: #A7D5E8;
+}
+
+.pull-right {
+  font-size: 20px;
+}
+
+.footnote{
+  font-size: 14px;
+}
+
+/* Logo */
+.remark-slide-content:after {
+    content: "";
+    position: absolute;
+    bottom: 5px;
+    left: 50px;
+    right: 810px;
+    height: 89px;
+    width: 144px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("africar.png");
+}

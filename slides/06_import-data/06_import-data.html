@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Importer et exporter les données</title>
+    <meta charset="utf-8" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: first-slide, center
+
+&lt;br/&gt;
+
+&lt;h1&gt;L'analyse des données avec &lt;img src="../img/Rlogo.png" width="10%" height="auto"&gt;&lt;/h1&gt;
+&lt;br/&gt;
+&lt;h1&gt;Importer et exporter les données 🗃&lt;/h1&gt;
+&lt;h3 style="color:#162C9a; text-align:center;"&gt;Anicet Ebou, Data et al.&lt;/h3&gt;
+&lt;h5&gt;<i class="fab  fa-github "></i> @Ebedthan, <i class="fab  fa-twitter "></i> @anicetebou&lt;/h5&gt;
+---
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="https://dataetal.com/" target="_blank"&gt;dataetal.com
+&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt;
+
+---
+
+
+
+class: center, middle, inverse
+
+# Importer les données
+
+---
+
+## Les types de fichiers
+
+- Les fichiers texte (Flat files): comma separated value (csv), tab separated value (tsv), etc.
+- Les fichiers Excel: .xlsx ou .xls.
+- Les fichiers statistiques: SAS, SPSS, STATA.
+- Les bases de données: PostgreSQL, MySQL.
+- Les données du Web: Scrapping.
+
+---
+
+## Importer les fichiers textes
+
+Nous utiliserons les packages `readr` et `data.table` pour leur rapidité et leur consistance.
+
+.pull-left[
+
+- fichier.csv avec header:  
+`date,first_name,last_name,age`  
+`2020-01-01,john,doe,23`  
+`2020-01-02,jane,doe,25`  
+...  
+
+
+```r
+file_name &lt;- readr::read_csv("lien/vers/fichier.csv")
+```
+
+]
+
+.pull-right[
+
+- fichier.csv sans header:  
+`2020-01-01,john,doe,23`  
+`2020-01-02,jane,doe,25`  
+... 
+
+
+```r
+file_name &lt;- readr::read_csv("lien/vers/fichier.csv",
+                             col_names = FALSE)
+```
+
+]
+
+---
+
+## Importer les fichiers textes
+
+.pull-left[
+
+- fichier.tsv avec header:  
+`date\tfirst_name\tlast_name\tage`  
+`2020-01-01\tjohn\tdoe\t23`  
+`2020-01-02\tjane\tdoe\t25`  
+...  
+
+
+```r
+file_name &lt;- readr::read_tsv("lien/vers/fichier.csv")
+```
+
+]
+
+.pull-right[
+
+- fichier.tsv sans header:  
+`2020-01-01\tjohn\tdoe\t23`  
+`2020-01-02\tjane\tdoe\t25`  
+... 
+
+
+```r
+file_name &lt;- readr::read_tsv("lien/vers/fichier.csv",
+                             col_names = FALSE)
+```
+
+]
+
+---
+
+
+## Importer les fichiers textes
+
+La fonction `fread()` du package data.table détecte immédiatement le format du fichier et la présence ou non d'entête.
+
+.pull-left[
+
+- fichier.csv (fichier.tsv) avec header:  
+`date,first_name,last_name,age`  
+`2020-01-01,john,doe,23`  
+`2020-01-02,jane,doe,25`  
+...  
+
+
+```r
+file_name &lt;- data.table::fread("lien/vers/fichier.csv")
+```
+]
+
+.pull-right[
+
+- fichier.csv (fichier.tsv) sans header:  
+`2020-01-01,john,doe,23`  
+`2020-01-02,jane,doe,25`  
+... 
+
+
+```r
+file_name &lt;- data.table::fread("lien/vers/fichier.csv")
+```
+
+]
+---
+
+## Importer les fichiers Excel
+
+Si vous entrez vos données dans Excel avant de les importer dans R alors faites un fichier excel sans grand style pour l'importation. Nous utiliserons le package `readxl`.
+
+.pull-left[
+  
+![](./img/excel-file.png)
+  
+]
+
+.pull-right[
+
+
+```r
+# pour les fichiers xlsx
+file_name &lt;- read_xlsx("lien/vers/fichier.xlsx")
+
+# pour les fichiers xls
+file_name &lt;- read_xls("lien/vers/fichier.xls")
+
+# si on n'est pas trop sur
+file_name &lt;- read_excel("lien/vers/fichier.xlsx")
+```
+
+]
+
+---
+
+class: center, middle, inverse
+
+# Exporter les données
+
+---
+
+## Exporter les données
+
+
+```r
+# Exporter en csv
+write_csv(objet, "fichier_export.csv")
+
+# Exporter en tsv
+write_tsv(objet, "fichier_export.tsv")
+
+# Convertir un fichier csv en excel
+write_excel_csv(objet, "fichier_export.xlsx")
+```
+
+---
+
+## Les autres types de fichiers
+
+- Le package **haven**  permet d'importer les fichiers de SPSS, SAS, STATA.
+- Le package **DBI** permet de communiquer avec les bases de données.
+- Le package **jsonlite** pour les fichiers json.
+- Le package **xml2** pour les fichiers xml
+
+---
+
+## haven pour les fichiers SPSS, SAS, STATA
+
+
+```r
+library(haven)
+
+# SAS
+read_sas("mtcars.sas7bdat")
+write_sas(mtcars, "mtcars.sas7bdat")
+
+# SPSS
+read_sav("mtcars.sav")
+write_sav(mtcars, "mtcars.sav")
+
+# Stata
+read_dta("mtcars.dta")
+write_dta(mtcars, "mtcars.dta")
+```
+
+---
+
+
+class: center, middle
+
+# Fin de la sixième session !
+# Merci !
+&lt;h1&gt; 👏 &lt;/h1&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="../macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

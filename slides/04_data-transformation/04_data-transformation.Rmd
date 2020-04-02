@@ -1,0 +1,362 @@
+---
+pagetitle: "La manipulation des données"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default-fonts","default", "../slides.css"]
+    lib_dir: libs
+    nature:
+      beforeInit: "../macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+
+class: first-slide, center
+  
+<br/>
+  
+<h1>L'analyse des données avec <img src="../img/Rlogo.png" width="10%" height="auto"></h1>
+<br/>
+<h1>La manipulation des données `r emo::ji('tool')`</h1>
+<h3 style="color:#162C9a; text-align:center;">Anicet Ebou, Data et al.</h3>
+<h5>`r icon::fa_github()` @Ebedthan, `r icon::fa_twitter()` @anicetebou</h5>
+
+---
+
+## Rappels
+
+- R est un langage de programmation statistique
+- RStudio est une interface convenable pour R
+- La data science a pour but de donner un apercu insoupconné sur des données
+- Toutes les analyses de données devraient être reproductible
+- R Markdown est un format de fichier pour créer des documents dynamiques
+- En analyse de données exploratoire, on commence toujours avec une visualisation des données
+- ggplot2 facilite la visualisation des données
+
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(afrods)
+```
+
+
+class: center, middle, inverse
+
+# Données ordonnées (Tidy data)
+
+---
+
+.left-column[
+
+## Qu'est ce que c'est?
+
+]
+
+.right-column[
+.quote[
+"Happy families are all alike; every unhappy family is unhappy is its own way." — Leo Tolstoy
+]
+
+Les règles qui définissent les données ordonnées sont:
+
+- Chaque variable doit avoir sa propre colonne;
+- Chaque observation doit avoir sa propre ligne;
+- Chaque valeur doit avoir sa propre cellule.
+]
+---
+
+## Données ordonnées
+
+![](./img/tidy-1.png)
+
+credits: R for Data Science - Hadley Wickham, Garret Grolemund
+
+---
+
+class: middle, center, inverse
+
+# Manipulation des données
+
+---
+## Données sur la santé des pays Africains
+
+Le jeu de données est contenue dans le package afrods (une partie des données sur la santé): 
+
+```{r eval=FALSE}
+# devtools::install_github("Ebedthan/afrods")
+library(afrods)
+health
+```
+
+---
+## Variables
+
+Pour voir les variables dans un jeu de données: 
+
+```{r, output.lines = 13}
+names(health)
+```
+---
+## Un apercu des données
+
+- Dans Rstudio, faire `data(health)`, ensuite cliquer sur le nom du jeu de données dans le panneau environnement.
+- Dans la console, utiliser la fonction `glimpse` pour un apercu: `glimpse(health)`.
+
+```{r, output.lines = 10}
+glimpse(health)
+```
+---
+
+## Une grammaire pour la manipulation des données
+
+**dplyr** est basé sur des verbes (fonctions) qui facilitent la manipulation des données.
+
+.pull-left[
+![:scale 55%](./img/dplyr-part-of-tidyverse.png)
+]
+
+.pull-right[
+- `filter()`: sélectionne les observations par leurs valeurs.
+- `arrange()`: réorganise les lignes.
+- `select()`: sélectionne les variables par leurs noms.
+- `mutate()`: crée de nouvelles variables en fonction des variables existantes.
+- `summarise()`: Résume les valeurs en un seul summary.
+- etc.
+]
+
+---
+
+## Une grammaire pour la manipulation des données
+
+Tout les verbes **dplyr** fonctionnent de la même manière: 
+
+- Le premier argument est un data frame.
+```{r eval=FALSE}
+verb(dataframe)
+```
+- Les arguments des verbes décrivent **quoi faire** avec le data frame, en utilisant **les noms des variables (sans les griffes)**.
+```{r eval=FALSE}
+verb(dataframe, var1 == value)
+```
+- Le résultat est un nouveau data frame (Il faut donc sauver ce nouveau data frame).
+```{r eval=FALSE}
+df <- verb(dataframe, var1 == value)
+```
+---
+
+## Filtrer les observations avec `filter()`
+
+Pour les données uniquement sur la Côte d'Ivoire:
+
+```{r output.lines = 10}
+filter(health, country == "Cote d'Ivoire")
+```
+
+---
+
+## Introduisons l'opérateur pipe: %>%
+
+Ecrire 
+```{r output.lines=3}
+filter(health, country == "Cote d'Ivoire")
+```
+
+Equivaut à (avec la pipe)
+```{r output.lines=3}
+health %>% filter(country == "Cote d'Ivoire")
+```
+
+---
+## Introduisons l'opérateur pipe: %>%
+
+`%>%` permet d'effectuer des opérations multiples sur les mêmes données plus facilement tout en gardant le code lisible.
+
+Par exemple 
+```{r eval=FALSE}
+cote_ivoire <- filter(health, country == "Cote d'Ivoire")
+infant_mortality_ci <- select(cote_ivoire, `Infant mortality rate`)
+```
+
+est plus simplement effectué par
+```{r eval=FALSE}
+health %>% 
+  filter(country == "Cote d'Ivoire") %>%
+  select(`Infant mortality rate`)
+```
+
+---
+
+## Introduisons l'opérateur pipe: %>%
+
+L'opérateur pipe est implementé dans le package **magrittr** et est prononcé "(et) ensuite".
+
+.pull-left[
+![](./img/magritte.jpg)
+]
+.pull-right[
+![](./img/magrittr.jpg)
+]
+---
+## Filtrer sur plusieurs conditions à la fois
+
+Pour les données sur la Côte d'Ivoire entre 1960 et 2010
+
+```{r output.lines = 10}
+health %>%
+  filter(country == "Cote d'Ivoire", year %in% c(1960:2010))
+```
+
+---
+
+## Les opérateurs logiques
+
+opérateur | définition          | | opérateur |  définition
+----------|---------------------| |-----------|-----------------
+`<`         |plus petit           | |`x` &nbsp;&#124;&nbsp; `y`      |`x` OU `y`
+`<=`        |plus petit ou égale  | |is.na(x)   |test si `x` est NA
+`>`         |plus grand que       | |!is.na(x)  |test si `x` n'est pas NA
+`>=`        |plus grand ou égal à | |`x` %in% `y`   |test si `x` est contenue dans `y`
+`==`        |égale à              | |!(`x` %in% `y`)|test si `x` n'est pas contenue dans `y`
+`!=`        |différent de         | |!`x`         |différent de `x`
+`x` & `y`     |`x` ET `y`               | |           |
+
+---
+
+## Comment les opérateurs logiques fonctionnent
+
+![:scale 60%](./img/transform-logical.png)
+
+```{r output.lines=4}
+health %>%
+  filter(country == "Cote d'Ivoire", year == 1960 | year == 2010)
+```
+
+---
+
+## Ordonner les lignes avec `arrange()`
+
+`arrange()` permet d'ordonner les lignes de facon croissante ou décroissante.
+
+```{r output.lines=5}
+health %>% arrange(year)
+```
+
+```{r output.lines=5}
+health %>% arrange(desc(year))
+```
+
+---
+
+## Sélectionner un certain nombre de ligne avec `slice()`
+
+Pour les 10 premières lignes:
+
+```{r output.lines=10}
+health %>% slice(1:10)
+```
+
+---
+
+## Sélectionner des variables avec `select()`
+
+- Sélectionner pour garder les variables
+```{r output.lines=5}
+health %>% select(country, year, region)
+```
+
+- Exclure des variables
+```{r output.lines=5}
+health %>% select(-region)
+```
+
+---
+## Sélectionner des variables avec `select()`
+
+Sélectionner une suite variables
+```{r output.lines=10}
+health %>%
+  select(country:region)
+```
+---
+
+## Ajouter de nouvelles variables avec `mutate()`
+
+`mutate()` permet d'ajouter de nouvelles colonnes (variables).
+
+```{r output.lines=10}
+health %>%
+  mutate(elapsed_years = 2020 - year)
+```
+
+---
+
+## Mesures groupées avec `summarise()`
+
+```{r}
+health %>% 
+  summarise(`Life expectancy` = mean(`Life expectancy`, na.rm = TRUE))
+```
+
+Combiné avec `group_by()`
+```{r}
+health %>% 
+  group_by(region) %>% 
+  summarise(`Life expectancy` = mean(`Life expectancy`, na.rm = TRUE))
+```
+---
+
+## Autres fonctions utiles
+
+- `pull()` pour extraire une variable comme vecteur
+```{r output.lines=5}
+health %>% pull(region)
+```
+
+- `distinct()` pour avoir les lignes uniques
+```{r output.lines=5}
+health %>% distinct(region)
+```
+
+---
+
+## Autres fonctions utiles
+
+- `sample_n()` pour un echantillon aléatoire de **n** éléments
+```{r output.lines=5}
+health %>% sample_n(5, replace = FALSE)
+```
+
+- `sample_frac()` pour un échantillon aléatoire de **frac** %
+```{r output.lines=5}
+health %>% sample_frac(0.2, replace = FALSE)
+```
+---
+
+## Autres fonctions utiles
+
+- `count()` pour le nombre d'observation par groupe
+```{r}
+health %>% count(region)
+```
+---
+
+## Que retenir ?
+
+- `dplyr` est une grammaire pour la manipulation des données.
+- Les action à poser sont **verbes**.
+- L'opérateur pipe facilite la tâche et à consommer sans modération.
+- Il faut toujours sauvegarder les résultats en les assignants dans des variables.
+
+---
+
+class: center, middle
+
+# Fin de la quatrième session !
+# Merci !
+<h1> `r emo::ji("clap")` </h1>

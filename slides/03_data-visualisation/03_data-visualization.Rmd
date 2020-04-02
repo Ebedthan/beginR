@@ -1,0 +1,499 @@
+---
+pagetitle: "La visualisation des données"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default-fonts","default", "../slides.css"]
+    lib_dir: libs
+    nature:
+      beforeInit: "../macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+class: first-slide, center
+
+<br/>
+
+<h1>L'analyse des données avec <img src="../img/Rlogo.png" width="10%" height="auto"></h1>
+<br/>
+<h1>La visualisation des données `r emo::ji('graph')`</h1>
+<h3 style="color:#162C9a; text-align:center;">Anicet Ebou, Data et al.</h3>
+<h5>`r icon::fa_github()` @Ebedthan, `r icon::fa_twitter()` @anicetebou</h5>
+
+---
+```{r child = "../setup.Rmd"}
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+source("create_table.R")
+```
+
+class: center, middle, inverse
+
+# La visualisation des données
+
+---
+
+.left-column[
+
+## Qu'est ce que c'est?
+
+]
+
+.right-column[
+.quote[
+"The simple graph has brought more information to the data analyst’s mind than any other device." — John Tukey
+]
+
+- La visualisation des données est la création et l'étude de la représentation visuelle des données.
+- Il existe de nombreux outils pour visualiser les données (R est l'un d'eux), et de nombreuses approches/systèmes dans R pour faire des visualisations de données (**ggplot2** est l'un d'eux, et c'est ce que nous allons utiliser).
+]
+---
+
+## ggplot2 $\in$ tidyverse
+
+.pull-left[
+![:scale 65%](./img/ggplot2-part-of-tidyverse.png)
+]
+
+.pull-right[
+- ggplot2 est le package de visualisation de données de tidyverse.
+- Le **gg** dans ggplot2 signifie grammar of graphics (grammaire des graphiques) 
+- La **grammaire des graphiques** viens du livre du même nom de Leland Wilkinson.
+- La grammaire des graphiques permet de décrire (et donc de construire) de facon précise les composants d'un graphique.
+]
+
+---
+
+```{r echo=FALSE, fig.width=9, fig.height=3.8, message=FALSE, warning=FALSE}
+ggplot(data = agri, mapping = aes(x = land, y = agri_val_added)) + 
+  geom_point() + 
+  geom_smooth() +
+  labs(title = "Agriculture value added to GDP vs. Agricultural land (CI)", 
+       x = "agricultural land (%)", y = "Agriculture contribution to GDP (%)")
+```
+.question[
+Comment arrive t'on a dessiner ce genre de graphe avec ggplot2?
+]
+
+---
+
+## La grammaire des graphiques
+
+```{r fig.height=3, fig.width=9}
+ggplot(data = agri)
+```
+
+---
+
+## La grammaire des graphiques
+
+```{r fig.height=3.5, fig.width=9}
+ggplot(data = agri, mapping = aes(x = land, y = agri_val_added))
+```
+
+---
+
+## La grammaire des graphiques
+
+```{r fig.height=3.5, fig.width=9}
+ggplot(data = agri, mapping = aes(x = land, y = agri_val_added)) + geom_point()
+```
+
+---
+
+## La grammaire des graphiques
+
+```{r fig.height=3.5, fig.width=9, message=FALSE, warning=FALSE}
+ggplot(data = agri, mapping = aes(x = land, y = agri_val_added)) + geom_point() + geom_smooth()
+```
+
+---
+
+## La grammaire des graphiques
+
+```{r fig.height=3, fig.width=9, message=FALSE, warning=FALSE}
+ggplot(data = agri, mapping = aes(x = land, y = agri_val_added)) + geom_point() + geom_smooth() + labs(title = "Agriculture value added to GDP vs. Agricultural land (CI)", 
+       x = "agricultural land (%)", y = "Agriculture contribution to GDP (%)")
+```
+
+---
+
+## Hi ggplot2!
+
+- ggplot() est la fonction principale du package ggplot2 et les graphiques sont construits **en couches**.
+- La structure du code des graphiques peut être synthétisée comme suit: 
+
+```{r eval=FALSE}
+ggplot +
+  geom_xxx
+```
+ou plus précisement:
+```{r eval=FALSE}
+ggplot(data = [dataset], mapping = aes(x = [x-variable], y = [y=variable])) +
+  geom_xxx() + other_options
+```
+
+- Il faut charger le package ggplot2 avant de pouvoir utiliser la fonction ggplot()
+
+```{r eval=FALSE}
+library(ggplot2)
+```
+---
+
+class: middle, center, inverse
+
+# Visualisons une partie de afrods
+
+---
+
+## Visualisons une partie de afrods
+
+.question[
+Que représente chaque colonne, chaque ligne?
+]
+
+```{r, output.lines = 8}
+agri
+```
+--
+- Les colonnes représentent **les variables**
+- Les lignes représentent **les observations**
+
+---
+
+## Que retrouve t'on dans ces données?
+
+Jetons un coup d'oeil:
+
+```{r}
+glimpse(agri)
+```
+
+.question[
+Combien de lignes et de colonnes contient ce tableau?
+]
+
+- Vous pouvez lire sur le résultat de `glimpse()`.
+- Ou pour un jeu de données integré en utilisant `?dataset`.
+
+---
+
+## Value added to GDP vs Agricultural land
+
+```{r fig.width=9, fig.height=3}
+ggplot(data = agri, mapping = aes(x = land, y = agri_val_added)) + 
+  geom_point() + 
+  labs(title = "Agriculture value added to GDP vs. Agricultural land (CI)", 
+       x = "agricultural land (%)", y = "Agriculture contribution to GDP (%)")
+```
+
+---
+
+## Qu'est ce que c'est cette alerte?
+
+- Il existe des valeurs manquantes dans le jeu de données (d'ou 3 d'entre elles n'ont pas été prises en compte).
+- Nous allons dans les futurs slides supprimer cette alerte pour faire un peu de place, cependant il est important de noter cela.
+
+---
+
+## Value added vs land percentage
+
+.instructions[
+Comment décririez vous cette relation? Quel autres facteurs permetraient d'expliquer cette allure?
+]
+
+```{r fig.width=9, fig.height=2.8, warning=FALSE}
+ggplot(data = agri, mapping = aes(x = land, y = agri_val_added)) + 
+  geom_point() + 
+  labs(title = "Agriculture value added to GDP vs. Agricultural land (CI)", #<< 
+       x = "agricultural land (%)", y = "Agriculture contribution to GDP (%)") #<<
+```
+
+---
+
+## Diversification de l'économie !!!
+
+```{r fig.width=9, fig.height=3.2, warning=FALSE}
+ggplot(data = agri, mapping = aes(x = year, y = industry_val_added)) + 
+  geom_point() + 
+  labs(title = "Industry value added to GDP vs. Years (CI)", #<< 
+       x = "Years", y = "Industry value added to GDP (%)") #<<
+```
+
+---
+
+## Variables additionnelles
+
+D'autres variables additionnelles peuvent être utilisées pour dessiner les graphiques:
+
+- aesthetics
+  - shape
+  - colour (or color)
+  - size
+  - alpha (transparency)
+- faceting: plusieurs graphes montrant différents sous graphiques
+
+---
+
+class: center, middle, inverse
+
+# Aesthetics
+
+---
+
+## Aesthetics options
+
+Les options des graphiques qui peuvent être **liées à des variables** du jeu de données sont
+- color
+- size
+- shape
+- alpha (transparency)
+
+---
+
+## Value added vs. land percentage + country
+
+```{r fig.width=9, fig.height=3.5, warning=FALSE}
+ggplot(data = agri_all, mapping = aes(
+         x = agri_val_added, 
+         y = land, color = country)) + geom_point()
+```
+
+---
+
+## Value added vs. land + country
+
+Relions la taille (size) à l'année (year):
+
+```{r fig.width=8, fig.height=3, warning=FALSE}
+ggplot(data = agri_all, mapping = aes(x = agri_val_added, y = land, color = country, 
+                                      size = year #<<
+                                    )) + geom_point()
+```
+
+---
+
+## Value added vs. land + country
+
+Agrandisons cette fois ci la taille de tout les points *non* sur les valeurs des variables:
+
+```{r fig.width=8, fig.height=3, warning=FALSE}
+ggplot(data = agri_all, mapping = aes(
+  x = agri_val_added, y = land, color = country)) + geom_point(size = 2) #<<
+```
+
+---
+
+## Résumons les aesthetics
+
+- Les variables continues sont mesurées sur une échelle continue.
+- Les variables dicrètes sont mesurées (ou souvent comptées) sur une échelle discrete.
+
+aesthetics    | discrete                 | continuous
+------------- | ------------------------ | -------------
+color         | rainbow of colors        | gradient
+size          | discrete steps           | correspondance lineaire entre le rayon et la valeur
+shape         | different shape for each | ne doit pas marcher (et ne marche pas)
+
+- Utiliser les aesthetics pour lier les caractéristiques d'un graphique à une variable, définir les caractéristiques **non liées** à des variables à l'intérieur des geom_*().
+
+---
+
+class: center, middle, inverse
+
+# Sous graphiques
+
+---
+
+### Les options pour les sous-graphiques
+
+- Les sous-graphiques permettent d'afficher des echantillons plus petits du jeu de données.
+- Utile pour explorer les relations conditionnelles et les données volumineuses.
+
+---
+
+```{r fig.width=8, fig.height=3.5, warning=FALSE}
+ggplot(data = agri_all, mapping = aes(
+  x = agri_val_added, y = land)) + 
+  facet_grid(. ~ country) + #<< 
+  geom_point() +
+  labs(title = "Agriculture value added to GDP vs. Land use (CI)", 
+       subtitle = "Faceted by country", #<< 
+       x = "Land use", y = "Value added to GDP (%)")
+```
+
+---
+
+## En eau profonde
+
+.instructions[
+Dans les prochaines slides, reflechissez sur ce que représente chaque graphique et pensez au code qui le genère.
+]
+
+
+.alert[
+Les graphiques des prochains slides n'ont pas de titre, et de nom pour les axes parce que nous voulons nous concentrer uniquement sur ce qui se passe. Mais les graphes doivent toujours être labelisés.
+]
+
+---
+
+```{r fig.width=8, fig.height=3.5, warning=FALSE}
+ggplot(data = agri_all, mapping = aes(x = agri_val_added, y = land)) + 
+  geom_point() +
+  facet_grid(country ~ .)
+```
+
+---
+
+```{r fig.width=8, fig.height=3.5, warning=FALSE}
+ggplot(data = agri_all, mapping = aes(x = agri_val_added, y = land)) + 
+  geom_point() +
+  facet_grid(. ~ country)
+```
+
+---
+
+```{r fig.width=8, fig.height=3.5, warning=FALSE}
+ggplot(data = agri_all, mapping = aes(x = agri_val_added, y = land)) + 
+  geom_point() +
+  facet_wrap(~ country)
+```
+
+---
+
+## Résumons
+
+- `facet_grid()`:
+   - 2d grid
+   - ligne ~ cols
+   - utiliser `.` pour ne pas subdiviser
+- `facet_wrap()`: bande 1d converti en 2d
+
+---
+
+class: middle, center, inverse
+
+# Identification des variables
+
+---
+
+## Nombre de variables dans une analyse
+
+- Analyse de donnée univariée: distribution d'un seule variable.
+- Analyse de données bivariée: relation entre deux variables.
+- Analyse de données multivariée: relation entre plusieurs variables en un coup; se focalisant en général sur une relation entre deux variables en conditionnant les autres.
+
+---
+
+## Types de variables
+
+- Les **variables numeriques** peuvent être classées comme **discrètes** ou **continues** selon qu'elles peuvent respectivement prendre ou pas un nombre infinie de valeur ou uniquement des valeurs positives.
+- Si une variable est **catégorielle** on peut déterminer si elle est **ordinale** en se basant sur le 
+ggplot
+
+---
+
+class: middle, center, inverse
+
+# La visualisation des données numériques
+
+---
+
+## Description des formes des distributions numériques
+
+- forme:
+  - asymétrie: asymétrie à droite, asymétrie à gauche, symétrie parfaite
+  - modalité: unimodale, bimodale, multimodale, uniforme
+- valeur centrale: moyenne (mean), medianne (median), mode  (pas toujours utile)
+- dispersion: étendue (range), variance (standard deviation, sd), Ecart interquartile (IQR)
+- observations inhabituelles
+
+---
+
+## Histogrammes
+
+```{r fig.width=8, fig.height=3, warning=FALSE}
+ggplot(data = agri, mapping = aes(x = land)) +
+  geom_histogram(binwidth = 1)
+```
+
+---
+
+## Diagramme de densité
+
+```{r fig.width=8, fig.height=3, warning=FALSE}
+ggplot(data = agri, mapping = aes(x = land)) +
+  geom_density()
+```
+
+---
+
+## Boite à moustache
+
+```{r fig.width=8, fig.height=3, warning=FALSE}
+ggplot(data = agri_all, mapping = aes(y = land, x = country)) +
+  geom_boxplot()
+```
+
+---
+
+class: center, middle, inverse
+
+# La visualisation des données catégorielles
+
+---
+
+## Diagramme en bâtons
+
+```{r fig.width=8, fig.height=3, warning=FALSE}
+ggplot(data = starwars, mapping = aes(x = gender)) +
+  geom_bar()
+```
+
+---
+
+### Diagramme en bâtons segmenté, les nombres
+
+```{r fig.width=8, fig.height=3, warning=FALSE}
+ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
+  geom_bar()
+```
+
+---
+
+### Diagramme en bâtons segmenté, les pourcentages
+
+```{r fig.width=9.5, fig.height=3.5, warning=FALSE}
+ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) + geom_bar(position = "fill") + labs(y = "proportion")
+```
+
+---
+
+### Quel est le diagramme en bâton le plus approprié?
+
+.question[
+Quel est le graphe en baton le plus approprié pour représenter la relation entre le genre et la couleur des cheveux
+]
+
+```{r echo=FALSE, fig.width=8, fig.height=3, warning=FALSE}
+starwars <- starwars %>% dplyr::mutate(hair_color2 = forcats::fct_other(hair_color, keep = c("black", "brown", "brown", "blond")))
+```
+
+```{r echo=FALSE, fig.height=1.5, fig.width=8}
+ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color2)) +
+  geom_bar()
+ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color2)) +
+  geom_bar(position = "fill") +
+  labs(y = "proportion")
+```
+
+---
+class: center, middle
+
+## Fin de la troisième session !
+# Merci !
+<h1> `r emo::ji("clap")` </h1>
