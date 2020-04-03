@@ -5,22 +5,21 @@ output:
     seal: false
     css: ["default-fonts","default", "../slides.css"]
     lib_dir: libs
+    includes:
+      in_header: "../header.html"
     nature:
       beforeInit: "../macros.js"
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-      ratio: 16:9
 ---
 class: first-slide, center
 
 <br/>
 
-<h1>L'analyse des données avec <img src="../img/Rlogo.png" width="10%" height="auto"></h1>
+<h1>L'analyse des données avec <img src="./img/Rlogo.png" width="10%" height="auto"></h1>
 <br/>
-<h1>La modélisation</h1>
-<h3 style="color:#162C9a; text-align:center;">Anicet Ebou, Data et al.</h3>
-<h5>`r icon::fa_github()` @Ebedthan, `r icon::fa_twitter()` @anicetebou</h5>
+<h1>Introduction à la modélisation</h1>
 ---
 ```{r child = "../setup.Rmd"}
 ```

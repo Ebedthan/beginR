@@ -5,7 +5,9 @@
     <meta charset="utf-8" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
-    <link href="libs/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
     <link rel="stylesheet" href="../slides.css" type="text/css" />
   </head>
   <body>
@@ -16,11 +18,9 @@ class: first-slide, center
   
 &lt;br/&gt;
   
-&lt;h1&gt;L'analyse des données avec &lt;img src="../img/Rlogo.png" width="10%" height="auto"&gt;&lt;/h1&gt;
+&lt;h1&gt;L'analyse des données avec &lt;img src="./img/Rlogo.png" width="10%" height="auto"&gt;&lt;/h1&gt;
 &lt;br/&gt;
 &lt;h1&gt;La manipulation des données 🏺&lt;/h1&gt;
-&lt;h3 style="color:#162C9a; text-align:center;"&gt;Anicet Ebou, Data et al.&lt;/h3&gt;
-&lt;h5&gt;<i class="fab  fa-github "></i> @Ebedthan, <i class="fab  fa-twitter "></i> @anicetebou&lt;/h5&gt;
 
 ---
 
@@ -554,11 +554,11 @@ health %&gt;% sample_n(5, replace = FALSE)
 ```
 
 ```
-##         country          region year
-## 1     Swaziland Southern Africa 1964
-## 2        Guinea  Western Africa 1959
-## 3 Cote d'Ivoire  Western Africa 1870
-## 4         Sudan Northern Africa 1895
+##         country         region year
+## 1    Mauritania Western Africa 2022
+## 2      Zimbabwe Eastern Africa 1910
+## 3 Cote d'Ivoire Western Africa 1945
+## 4  Burkina Faso Western Africa 1795
 ...
 ```
 
@@ -570,10 +570,10 @@ health %&gt;% sample_frac(0.2, replace = FALSE)
 
 ```
 ##                       country          region year
-## 1                South Africa Southern Africa 2043
-## 2                        Mali  Western Africa 1861
-## 3                        Togo  Western Africa 1766
-## 4                     Algeria Northern Africa 1877
+## 1                      Rwanda  Eastern Africa 2002
+## 2                      Angola   Middle Africa 1973
+## 3                    Zimbabwe  Eastern Africa 1865
+## 4                  Madagascar  Eastern Africa 1855
 ...
 ```
 ---
@@ -619,8 +619,7 @@ class: center, middle
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9"
+"countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

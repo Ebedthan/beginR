@@ -5,6 +5,8 @@ output:
     seal: false
     css: ["default-fonts", "default", "../slides.css"]
     lib_dir: libs
+    includes:
+      in_header: "../header.html"
     nature:
       highlightStyle: github
       highlightLines: true
