@@ -1,0 +1,120 @@
+---
+pagetitle: "Bienvenue"
+output:
+  xaringan::moon_reader:
+    seal: false
+    css: ["default-fonts", "default", "../slides.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+class: first-slide, center
+
+<br/>
+
+<h1>L'analyse des données avec <img src="./img/Rlogo.png" width="10%" height="auto"></h1>
+<br/>
+<h1>Bienvenue `r emo::ji('hand')`</h1>
+
+---
+```{r child = "../setup.Rmd"}
+```
+
+class: center, middle, inverse
+
+# Qu'est-ce que c'est la data science?
+
+---
+
+## Data Science ?
+
+.quote[
+Data science is an exciting discipline that allows you to turn raw data into understanding, insight, and knowledge.
+
+**Hadley Wickham - [R for Data Science](https://r4ds.had.co.nz/)**
+]
+
+--
+
+- Il s'agit de gagner de la **compréhension** et de tirer des **insights** à partir des données brutes.
+--
+
+- Objectif: Tirer des informations, parfois auquelles ont ne s'attends pas, des données brutes obtenues.
+
+---
+
+class: center, middle
+
+# It's not what you look at that matters, it's what you see.
+
+### Henry David Thoreau
+
+
+---
+
+## Data Science # ML # AI
+
+* La Data Science produit des insights.
+* L'Apprentisage machine produit des prédictions.
+* L'intelligence Artificielle produit des actions.
+
+Dixit [David Robinson](https://varianceexplained.org/r/ds-ml-ai)
+
+
+---
+class: center, middle, inverse
+
+# Ce que la Data Science peut faire
+
+---
+
+## Analyse des tweets de Donald Trump
+
+.pull-left[
+"L'analyse des tweets de Trump confirme que les tweets venant reéllement de lui sont colérique et ont été posté à l'aide d'un téléphone Android."
+
+David Robinson
+
+http://varianceexplained.org/r/trump-tweets/
+]
+
+.pull-right[
+![](img/android_iphone_ratios_plot-1.svg)
+]
+---
+
+## Comment Alexa distingue les accents d'anglais?
+
+.pull-left[
+"Il y a une claire différence entre la longueur entre les mots entre les natifs et les non-natifs."
+
+Julia Silge
+
+https://juliasilge.com/blog/amazon-alexa/
+]
+
+.pull-right[
+![](img/boxplot-1.png)
+]
+---
+class: center, middle, inverse
+
+# De plein pieds
+
+---
+
+## TODO
+
+- Ajouter la partie installer R et Rstudio 
+- Ajouter des activités à faire par exemple avec learnr ou sur Rstudio cloud
+
+---
+
+class: center, middle
+
+## Fin de la premiere session !
+## Merci !
+<h1> `r emo::ji("clap")` </h1>
