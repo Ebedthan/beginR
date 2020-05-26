@@ -7,8 +7,8 @@ In Africa, so often, people don't have the right push to overcome the first chal
 
   ## La boîte à outils de R | R Toolkit
   
-  [0.1-Installer R et Rstudio]()
-  [0.2-Mise à jour de R]()
+  [0.1-Installer R et Rstudio]()  
+  [0.2-Mise à jour de R]()  
   [0.3-Github pour les utilisateurs de R]()  
   [0.4-R Markdown]()  
   
